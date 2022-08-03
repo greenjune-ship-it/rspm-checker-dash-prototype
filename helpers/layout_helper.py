@@ -1,5 +1,8 @@
+import os
 from dash import dcc, html
 import dash_bootstrap_components as dbc
+
+from helpers.get_rspm_logs import format_markdown
 
 PLOTLY_LOGO = "https://images.plot.ly/logo/new-branding/plotly-logomark.png"
 
@@ -12,8 +15,8 @@ def create_navbar(title):
                     [
                         dbc.Col(html.Img(src=PLOTLY_LOGO, height="30px")),
                         dbc.Col(dbc.NavbarBrand(title)),
-                    ],
-                ),
+                    ]
+                )
             ],
             fluid=False,
         ),
@@ -32,16 +35,24 @@ def create_controls(id, label, options, value):
                 options=options,
                 clearable=False,
                 value=value
-            ),
+            )
         ],
-        body=True,
+        body=True
     )
 
 
-def create_result(id, label):
+def create_result(id, label, content):
     return dbc.Card(
         [
-            dbc.Label(label),
-            html.Div(id=id)
-        ]
+            dbc.Row(dbc.Label(label)),
+            dbc.Row(
+                html.Div([
+                    dcc.Markdown(
+                        format_markdown(content),
+                        id=id
+                    )
+                ])
+            )
+        ],
+        body=True
     )
