@@ -1,75 +1,43 @@
 import dash
-from dash import dcc
-from dash import html
+from dash import dcc, html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
-app = dash.Dash(__name__)
+from helpers.layout_helper import create_navbar, create_controls, create_result
+
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.title = "RStudio Package Manager Checker"
 
-app.layout = html.Div(
-    id='main_page',
-    children=[
-        html.Div(
-            id='app-page-header',
-            children=[
-                html.H2(
-                    app.title
-                )
-            ]
+navbar = create_navbar(app.title)
+
+controls = create_controls(
+    id='selected-app',
+    label='Select App Name',
+    options=["Default", "One", "Two", "Three"],
+    value='Default'
+)
+
+result = create_result(
+    id='selected-value',
+    label='Result'
+)
+
+app.layout = dbc.Container(
+    [
+        dbc.Row(
+            [
+                dbc.Col(navbar)
+            ],
         ),
-        html.Div(
-            id='app-page-content',
-            className='control-tabs',
-            children=[
-                html.Div(id='app-control-tabs', children=[
-                    dcc.Tabs(
-                        id='app-tabs',
-                        value='what-is',
-                        children=[
-                            dcc.Tab(
-                                label='About',
-                                value='what-is',
-                                children=html.Div(className='control-tab', children=[
-                                    html.H4(
-                                        className='what-is',
-                                        children='What is rspm-checker?'
-                                    ),
-                                    html.P('Some descriptive info about app')
-                                ])
-                            ),
-                            dcc.Tab(
-                                label='Inspect',
-                                value='select-app',
-                                children=html.Div(className='app-controls-block', children=[
-                                    dcc.Dropdown(
-                                        id='selected-app',
-                                        className='app-dropdown',
-                                        options=["Default", "One", "Two", "Three"],
-                                        clearable=False,
-                                        value="Default"
-                                    )
-                                ])
-                            )
-                        ]
-                    )
-                ])
-            ]
+        html.Br(),
+        dbc.Row(
+            [
+                dbc.Col(controls, md=4),
+                dbc.Col(result, md=8)
+            ],
         ),
-        html.Div(
-            id='app-container',
-            children=[
-                html.Div(
-                    id='logs-container',
-                    children=[
-                        html.Div(
-                            id="selected-value"
-                        )
-                    ]
-                )
-            ]
-        )
-    ]
+    ],
+    fluid=False,
 )
 
 

@@ -1,3 +1,8 @@
+/* For shiny fonts */
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.form-label {
+    font-weight: bold
 }
