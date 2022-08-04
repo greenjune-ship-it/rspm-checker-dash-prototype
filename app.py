@@ -1,9 +1,10 @@
 import dash
-from dash import dcc, html
+from dash import html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
 from helpers.layout_helper import create_navbar, create_controls, create_result
+from helpers.tabs_helper import create_main_tab, create_about_tab
 from helpers.get_rspm_logs import format_markdown
 
 # to do implement retrieving of packages from MySQL RSPM Database
@@ -34,36 +35,8 @@ result = create_result(
     content=options_for_selectize[0]
 )
 
-tab_main = dbc.Card(
-    dbc.CardBody(
-        [
-            dbc.Row(
-                [
-                    dbc.Col(controls, md=4),
-                    dbc.Col(result, md=8)
-                ]
-            )
-        ]
-    ),
-    className="mt-3",
-    style={"border": "0px"}
-)
-
-tab_about = dbc.Card(
-    dbc.CardBody(
-        [
-            html.P("Some Description", className="card-text")
-        ]
-    ),
-    className="mt-3",
-)
-
-tabs = dbc.Tabs(
-    [
-        dbc.Tab(tab_main, label="Main"),
-        dbc.Tab(tab_about, label="About")
-    ]
-)
+tab_main = create_main_tab(controls, result)
+tab_about = create_about_tab()
 
 app.layout = dbc.Container(
     [
@@ -73,7 +46,12 @@ app.layout = dbc.Container(
             ]
         ),
         html.Br(),
-        tabs
+        dbc.Tabs(
+            [
+                dbc.Tab(tab_main, label="Main"),
+                dbc.Tab(tab_about, label="About")
+            ]
+        )
     ],
     fluid=False,
 )
